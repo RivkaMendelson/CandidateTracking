@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import { useCandidateCount } from './CandidateCountContext';
 
 
 const AddCandidate = () => {
@@ -12,6 +13,7 @@ const AddCandidate = () => {
     const [notes, setNotes] = useState('');
     const [isSubmitting, setIsSumbitting] = useState(false);
     const navigate = useNavigate();
+    const { refreshCandidateCounts } = useCandidateCount();
 
     const onSubmitClick = async () => {
         setIsSumbitting(true);
@@ -24,6 +26,7 @@ const AddCandidate = () => {
             status: 'pending'
         });
         setIsSumbitting(false);
+        await refreshCandidateCounts();
         navigate('/');
 
     }

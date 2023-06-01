@@ -10,14 +10,14 @@ const CandidateCountContext = ({ children }) => {
 
 
     const refreshCandidateCounts = async () => {
-        const { pendingData } = await axios.get('/api/candidateTracking/getcounts?status=pending');
-        setPendingCount(pendingData);
+        const pendingCount = await axios.get('/api/candidateTracking/getcounts?status=pending');
+        setPendingCount(pendingCount.data);
+        
+        const deniedCount = await axios.get('/api/candidateTracking/getcounts?status=denied');
+        setDeniedCount(deniedCount.data);
 
-        const { deniedData } = await axios.get('/api/candidateTracking/getcounts?status=denied');
-        setDeniedCount(deniedData);
-
-        const { confirmedData } = await axios.get('/api/candidateTracking/getcounts?status=confirmed');
-        setConfirmedCount(confirmedData);
+        const confirmedCount = await axios.get('/api/candidateTracking/getcounts?status=confirmed');
+        setConfirmedCount(confirmedCount.data);
     }
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const CandidateCountContext = ({ children }) => {
     }, []);
 
     return (
-        <CountContext.Provider value={pendingCount, confirmedCount, deniedCount, refreshCandidateCounts }>
+        <CountContext.Provider value={{ pendingCount, confirmedCount, deniedCount, refreshCandidateCounts } }>
             {children}
         </CountContext.Provider>
     )

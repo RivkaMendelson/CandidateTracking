@@ -1,13 +1,15 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useCandidateCount } from './CandidateCountContext';
+
 
 const Details = () => {
 
     const { id } = useParams();
     const [candidate, setCandidate] = useState({});
     const navigate = useNavigate();
-    const { RefreshCandidateCounts } = useCandidateCount();
+    const { refreshCandidateCounts, setStatus} = useCandidateCount();
 
     useEffect(() => {
         const getById = async () => {
@@ -19,7 +21,7 @@ const Details = () => {
 
     const onConfirmClick = async () => {
         await axios.post('/api/CandidateTracking/update', { status: 'confirmed', id });
-        //await RefreshCandidateCounts();
+        await refreshCandidateCounts();
         navigate('/confirmed');
         setStatus('');
 
@@ -30,7 +32,7 @@ const Details = () => {
         navigate('/denied');
         setStatus('');
 
-        //await RefreshCandidateCounts();
+        await refreshCandidateCounts();
 
     }
 
